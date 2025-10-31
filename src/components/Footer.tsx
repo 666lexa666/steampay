@@ -61,18 +61,6 @@ const Footer: React.FC<FooterProps> = ({ onOpenDocumentModal }) => {
                   kudurettilla@icloud.com
                 </a>
               </div>
-
-              {/* Phone */}
-              <div className="flex items-center space-x-3">
-                <Phone className="h-5 w-5 text-cyan-400" />
-                <a
-                  href="tel:+79259198199"
-                  className="text-gray-300 hover:text-cyan-400 transition-colors
-                             hover:shadow-[0_0_10px_rgba(34,211,238,0.8)]"
-                >
-                  +7(925)919-81-99
-                </a>
-              </div>
             </div>
           </div>
         </div>
