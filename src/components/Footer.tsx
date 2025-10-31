@@ -54,11 +54,11 @@ const Footer: React.FC<FooterProps> = ({ onOpenDocumentModal }) => {
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-cyan-400" />
                 <a
-                  href="mailto:support@example.com"
+                  href="mailto:kudurettilla@icloud.com"
                   className="text-gray-300 hover:text-cyan-400 transition-colors
                              hover:shadow-[0_0_10px_rgba(34,211,238,0.8)]"
                 >
-                  support@example.com
+                  kudurettilla@icloud.com
                 </a>
               </div>
 
@@ -66,11 +66,11 @@ const Footer: React.FC<FooterProps> = ({ onOpenDocumentModal }) => {
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-cyan-400" />
                 <a
-                  href="tel:+70000000000"
+                  href="tel:+79259198199"
                   className="text-gray-300 hover:text-cyan-400 transition-colors
                              hover:shadow-[0_0_10px_rgba(34,211,238,0.8)]"
                 >
-                  +7 (000) 000-00-00
+                  +7(925)919-81-99
                 </a>
               </div>
             </div>
