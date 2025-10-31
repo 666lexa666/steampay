@@ -153,6 +153,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, onSubmit, 
               К пополнению Steam аккаунта: <span className="font-bold">{numAmount} ₽</span>
             </div>
           )}
+          
 
           {/* Action Buttons */}
           <div className="flex space-x-3">
