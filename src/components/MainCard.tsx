@@ -52,31 +52,12 @@ const MainCard: React.FC<MainCardProps> = ({ onOpenPaymentModal }) => {
           </p>
           </div>
 
-          {/* Commission Info */}
-          <div className="relative mb-8">
-            <div className="bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-lg p-4 flex items-center justify-between">
-              <span className="inline-block bg-green-500/80 text-white font-semibold px-3 py-1 rounded-lg shadow-md">
-                Комиссия: 0% ₽ — 1 к 1 на аккаунт
-              </span>
-              <div className="relative">
-                <button
-                  onMouseEnter={() => setShowCommissionTooltip(true)}
-                  onMouseLeave={() => setShowCommissionTooltip(false)}
-                  className="text-orange-400 hover:text-orange-300 transition-colors"
-                >
-                  <HelpCircle className="h-5 w-5" />
-                </button>
-                {showCommissionTooltip && (
-                  <div className="absolute right-0 top-8 bg-gray-800 border border-gray-600 rounded-lg p-3 text-sm text-gray-300 w-64 z-10">
-                    <p className="font-semibold mb-1">Пример расчета:</p>
-                    <p>При пополнении на 1000 ₽:</p>
-                    <p>• К оплате: 1000 ₽</p>
-                    <p>• На счет Steam: 900 ₽</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          {/* Steam Top-Up Info */}
+<div className="relative mb-8">
+  <div className="bg-gradient-to-r from-green-500/20 to-green-700/20 border border-green-400/30 rounded-lg p-4 text-white font-semibold text-center shadow-md">
+    Пополнение Steam аккаунта — 1 к 1, без комиссии
+  </div>
+</div>
 
           {/* Agreement Checkbox */}
           <div className="mb-8">
