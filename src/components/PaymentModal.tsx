@@ -142,7 +142,11 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, onSubmit, 
               placeholder="Введите сумму"
               aria-invalid={!!errors.amount}
             />
-            <p className="text-gray-400 text-xs mt-1">
+            <p
+              className={`text-xs mt-1 ${
+                numAmount < 100 || numAmount > 10000 ? 'text-red-400' : 'text-gray-400'
+              }`}
+            >
               Минимум: 100₽ | Максимум: 10,000₽
             </p>
             <p className="text-gray-400 text-xs mt-1">
