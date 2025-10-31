@@ -125,7 +125,10 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, onSubmit, 
 
           {/* Amount Field */}
           <div>
-            <label htmlFor="amount" className="block text-sm font-medium text-gray-300 mb-2">
+            <label
+              htmlFor="amount"
+              className="block text-sm font-medium text-gray-300 mb-2"
+            >
               Сумма (₽)
             </label>
             <input
@@ -140,7 +143,10 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, onSubmit, 
               aria-invalid={!!errors.amount}
             />
             <p className="text-gray-400 text-xs mt-1">
-              Минимум 100 ₽, максимум 100 000 ₽. Комиссия 10% будет вычтена из указанной суммы.
+              Минимум: 100₽ | Максимум: 10,000₽
+            </p>
+            <p className="text-gray-400 text-xs mt-1">
+              Лимит на одного плательщика: 10,000₽ в сутки | 100,000₽ в месяц
             </p>
             {errors.amount && (
               <p className="text-red-400 text-sm mt-1">{errors.amount}</p>
@@ -169,7 +175,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, onSubmit, 
             </button>
             <button
               type="submit"
-              disabled={isLoading || !steamLogin.trim() || !amount || numAmount < 100 || numAmount > 100000}
+              disabled={isLoading || !steamLogin.trim() || !amount || numAmount < 100 || numAmount > 10000}
               className="flex-1 px-4 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 disabled:from-gray-600 disabled:to-gray-600 text-white rounded-lg transition-all flex items-center justify-center space-x-2"
             >
               {isLoading ? (
