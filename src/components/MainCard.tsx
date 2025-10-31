@@ -44,15 +44,20 @@ const MainCard: React.FC<MainCardProps> = ({ onOpenPaymentModal }) => {
             <h2 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-2">
               Пополнение Steam
             </h2>
-            <p className="text-xl text-gray-300">
-              Быстро. Безопасно. Комиссия 10%.
-            </p>
+           <p className="text-xl text-gray-300 leading-relaxed text-center">
+            Пополнение <span className="text-white font-semibold">Steam</span> по&nbsp;
+            <span className="text-white font-semibold">СБП</span> — 1 к 1.<br />
+            Моментально. Безопасно. Без комиссии. <br />
+            <span className="text-green-400 font-semibold">Комиссия 0%</span>.
+          </p>
           </div>
 
           {/* Commission Info */}
           <div className="relative mb-8">
             <div className="bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-lg p-4 flex items-center justify-between">
-              <span className="text-orange-300 font-semibold">Комиссия: 10%</span>
+              <span className="text-green-400 font-semibold">
+                Комиссия: 0% ₽ — 1 к 1 на аккаунт
+              </span>
               <div className="relative">
                 <button
                   onMouseEnter={() => setShowCommissionTooltip(true)}
