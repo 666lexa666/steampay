@@ -147,13 +147,15 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, onSubmit, 
             )}
           </div>
 
-          {/* Dynamic Calculation */}
+          {/* 💰 Dynamic Calculation */}
           {numAmount > 0 && (
-            <div className="bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 rounded-lg p-4 text-white font-medium">
-              К пополнению Steam аккаунта: <span className="font-bold">{numAmount} ₽</span>
+            <div className="bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-cyan-500/10 border border-cyan-400/30 rounded-2xl p-5 text-center shadow-md backdrop-blur-sm">
+              <p className="text-white text-lg font-medium">
+                К пополнению <span className="text-white font-semibold">Steam аккаунта</span>:
+                <span className="text-cyan-300 font-bold ml-2">{numAmount} ₽</span>
+              </p>
             </div>
           )}
-          
 
           {/* Action Buttons */}
           <div className="flex space-x-3">

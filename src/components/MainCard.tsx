@@ -55,7 +55,7 @@ const MainCard: React.FC<MainCardProps> = ({ onOpenPaymentModal }) => {
           {/* Commission Info */}
           <div className="relative mb-8">
             <div className="bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-lg p-4 flex items-center justify-between">
-              <span className="text-green-400 font-semibold">
+              <span className="inline-block bg-green-500/80 text-white font-semibold px-3 py-1 rounded-lg shadow-md">
                 Комиссия: 0% ₽ — 1 к 1 на аккаунт
               </span>
               <div className="relative">
