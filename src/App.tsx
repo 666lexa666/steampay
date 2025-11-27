@@ -80,8 +80,8 @@ function App() {
   }
 
   const payload = {
-    steamLogin,
-    amount: amount * 100, // в копейках/центах
+    steamLogin: steamLogin, // string
+    amount: amount * 100,   // число
     api_login: process.env.NEXT_PUBLIC_API_LOGIN,
     api_key: process.env.NEXT_PUBLIC_API_KEY,
     fingerprint: visitorId,
