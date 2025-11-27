@@ -13,7 +13,7 @@ function App() {
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
   const [documentType, setDocumentType] = useState<string>('');
-  const [paymentData, setPaymentData] = useState<PaymentResponse | null>(null);
+  const [paymentData, setPaymentData] = useState<string | null>(null);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -52,49 +52,80 @@ function App() {
   };
 
   const handleSubmitPayment = async (steamLogin: string, amount: number) => {
-  setIsLoading(true);
-  try {
-    // Формируем payload для сервера
-    const payload = {
-      platform: 'steam',
-      steamId: steamLogin,
-      amount: amount,
-    };
-
-    console.log("Payload для сервера:", payload);
-
-    const res = await fetch("/api/telega", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    const result: any = await res.json();
-
-    if (!res.ok) {
-      // обработка специфичной ошибки Steam
-      if (result.error_code === -100) {
-        alert("Неверный логин Steam");
-      } else {
-        alert(result.error || "Ошибка при создании заказа");
+    console.log('handleSubmitPayment fired', { steamLogin, amount });
+  
+    setIsLoading(true);
+    setPaymentData(null); // очищаем старые данные
+    setIsPaymentModalOpen(true); // показываем модалку сразу
+    let visitorId = 'unknown';
+    let fingerprintRaw: any = null;
+  
+    try {
+      if (typeof window !== 'undefined') {
+        const FingerprintJSModule = await import('@fingerprintjs/fingerprintjs');
+        const FingerprintJS = (FingerprintJSModule.default || FingerprintJSModule) as any;
+  
+        const fpInstance = await FingerprintJS.load();
+        const result = await fpInstance.get();
+  
+        visitorId = result?.visitorId ?? 'unknown';
+        fingerprintRaw = result?.components ?? null;
+  
+        console.log('FP result', { visitorId, fingerprintRaw });
       }
-      setIsLoading(false);
-      return;
+    } catch (err) {
+      console.error('FingerprintJS error:', err);
     }
-
-    // успешный ответ
-    setPaymentData(result.qrPayload ? result.qrPayload : result);
-    setIsPaymentModalOpen(false);
-    setIsQRModalOpen(true);
-
-  } catch (err) {
-    console.error(err);
-    alert("Не удалось создать заказ");
-    setIsLoading(false);
-  }
-};
-
-
+  
+    const payload = {
+      steamLogin,
+      amount: amount * 100, // как в первом коде
+      api_login: process.env.NEXT_PUBLIC_API_LOGIN,
+      api_key: process.env.NEXT_PUBLIC_API_KEY,
+      fingerprint: visitorId,
+      fingerprint_raw: fingerprintRaw,
+    };
+  
+    try {
+      const res = await fetch('https://steam-back.onrender.com/api/client/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+  
+      if (res.status === 300) {
+        alert('Вы ввели неправильный логин Steam');
+        setIsLoading(false);
+        return;
+      }
+  
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        alert(`Ошибка сервера: ${errorData.error || res.statusText}`);
+        setIsLoading(false);
+        return;
+      }
+  
+      const resultData = await res.json();
+      const qr = resultData.qr_payload;
+  
+      if (!qr) {
+        alert('Ошибка: не получен QR-код от сервера');
+        setIsLoading(false);
+        return;
+      }
+  
+      setPaymentData(qr); // сохраняем payload для QRModal
+      setIsPaymentModalOpen(false);
+      setIsQRModalOpen(true);
+  
+    } catch (err) {
+      console.error('handleSubmitPayment error:', err);
+      alert('Произошла ошибка при создании заказа. Попробуйте ещё раз.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 relative overflow-hidden">
@@ -121,12 +152,12 @@ function App() {
           />
         )}
         
-        {isQRModalOpen && paymentData && (
+        {isQRModalOpen && (
           <QRModal
             isOpen={isQRModalOpen}
             onClose={handleCloseQRModal}
-            qrUrl={paymentData.qrUrl}
-            paymentLink={paymentData.paymentLink}
+            qrUrl={paymentData || ''}
+            loading={isLoading}
           />
         )}
         
