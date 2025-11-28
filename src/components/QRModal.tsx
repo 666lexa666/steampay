@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { X, Clock } from 'lucide-react';
+import { QRCodeCanvas } from "qrcode.react";
 
 interface QRModalProps {
   isOpen: boolean;
@@ -70,10 +71,12 @@ const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose, qrUrl, loading, moda
             ) : modalError ? (
               <p className="text-red-400">{modalError}</p>
             ) : (
-              <img
-                src={qrUrl}
-                alt="QR код для оплаты"
-                className="w-48 h-48 mx-auto"
+              <QRCodeCanvas
+                value={qrUrl}
+                size={192}          // 48 * 4 = ~192px
+                bgColor="#ffffff"
+                fgColor="#000000"
+                includeMargin={false}
               />
             )}
           </div>
