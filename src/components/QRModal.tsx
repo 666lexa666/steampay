@@ -1,14 +1,16 @@
 import React, { useEffect, useRef } from 'react';
-import { X, ExternalLink, Clock } from 'lucide-react';
+import { X, Clock } from 'lucide-react';
+import { QRCodeCanvas } from "qrcode.react";
 
 interface QRModalProps {
   isOpen: boolean;
   onClose: () => void;
-  qrUrl: string;
-  paymentLink: string;
+  qrUrl: string;            // просто строка QR
+  loading?: boolean;        // опциональный флаг загрузки
+  modalError?: string;      // опциональная ошибка
 }
 
-const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose, qrUrl, paymentLink }) => {
+const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose, qrUrl, loading, modalError }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -46,7 +48,7 @@ const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose, qrUrl, paymentLink }
             className="w-full h-full object-cover rounded-full"
           />
         </div>
-        
+
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h3 id="qr-modal-title" className="text-2xl font-bold text-white">
@@ -62,32 +64,25 @@ const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose, qrUrl, paymentLink }
         </div>
 
         <div className="text-center space-y-6">
-          {/* QR Code */}
+          {/* QR Code / Loading / Error */}
           <div className="bg-white p-4 rounded-xl inline-block">
-            <img
-              src={qrUrl}
-              alt="QR код для оплаты"
-              className="w-48 h-48 mx-auto"
-            />
+            {loading ? (
+              <p>Загрузка...</p>
+            ) : modalError ? (
+              <p className="text-red-400">{modalError}</p>
+            ) : (
+              <QRCodeCanvas
+                value={qrUrl}
+                size={192}          // 48 * 4 = ~192px
+                bgColor="#ffffff"
+                fgColor="#000000"
+                includeMargin={false}
+              />
+            )}
           </div>
 
           {/* Instructions */}
-          <p className="text-gray-300">
-            Отсканируйте QR-код или перейдите по ссылке ниже
-          </p>
-
-          {/* Payment Link */}
-          <div className="bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 rounded-lg p-4">
-            <a
-              href={paymentLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center space-x-2 text-cyan-400 hover:text-cyan-300 transition-colors"
-            >
-              <span className="truncate">Открыть ссылку для оплаты</span>
-              <ExternalLink className="h-4 w-4 flex-shrink-0" />
-            </a>
-          </div>
+          <p className="text-gray-300">Отсканируйте QR-код</p>
 
           {/* Timeout Warning */}
           <div className="bg-orange-500/20 border border-orange-500/30 rounded-lg p-3 flex items-start space-x-2">
