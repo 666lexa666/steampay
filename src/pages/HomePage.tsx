@@ -161,8 +161,8 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-black relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,200,255,0.1),transparent_50%)]"></div>
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyMjIiIG9wYWNpdHk9IjAuMSI+PHBhdGggZD0iTTM2IDM0djItaDJ2LTJoLTJ6bTAgNHYyaDJ2LTJoLTJ6bS0yLTJoMnYtMmgtMnYyem0wLTRoMnYtMmgtMnYyem0wIDhoMnYtMmgtMnYyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-20"></div>
+      <div className="absolute inset-0"></div>
+      <div className="absolute inset-0"></div>
 
       <div className="relative z-10 container mx-auto px-4 py-8">
         <header className="text-center mb-12">
@@ -176,7 +176,7 @@ export function HomePage() {
         </header>
 
         <main className="max-w-md mx-auto">
-          <div className="bg-gray-900/80 backdrop-blur-sm border-2 border-cyan-500/30 rounded-2xl p-8 shadow-2xl shadow-cyan-500/20">
+          <div className="bg-gray-900/80 border-2 border-cyan-500/30 rounded-2xl p-8 shadow-none">
             <h2 className="text-2xl font-bold text-white mb-6 text-center">
               Форма пополнения
             </h2>
@@ -191,7 +191,7 @@ export function HomePage() {
                   id="steamLogin"
                   value={steamLogin}
                   onChange={(e) => setSteamLogin(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-800 border border-cyan-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all"
+                  className="w-full px-4 py-3 bg-gray-800 border border-cyan-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 focus:ring-0"
                   placeholder="Введите ваш логин Steam"
                   required
                 />
@@ -206,7 +206,7 @@ export function HomePage() {
                   id="amount"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-800 border border-cyan-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all"
+                  className="w-full px-4 py-3 bg-gray-800 border border-cyan-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 focus:ring-0"
                   placeholder="Введите сумму"
                   min="1"
                   step="1"
@@ -220,14 +220,14 @@ export function HomePage() {
                   id="agree"
                   checked={isAgreed}
                   onChange={(e) => setIsAgreed(e.target.checked)}
-                  className="mt-1 w-5 h-5 bg-gray-800 border border-cyan-500/30 rounded focus:ring-2 focus:ring-cyan-400/20 text-cyan-400 cursor-pointer"
+                  className="mt-1 w-5 h-5 bg-gray-800 border border-cyan-500/30 rounded cursor-pointer"
                 />
                 <label htmlFor="agree" className="text-sm text-gray-300 leading-relaxed">
                   Я принимаю{' '}
                   <button
                     type="button"
                     onClick={() => setActiveModal('offer')}
-                    className="text-cyan-400 hover:text-cyan-300 underline"
+                    className="text-cyan-400 underline"
                   >
                     оферту
                   </button>
@@ -235,7 +235,7 @@ export function HomePage() {
                   <button
                     type="button"
                     onClick={() => setActiveModal('privacy')}
-                    className="text-cyan-400 hover:text-cyan-300 underline"
+                    className="text-cyan-400 underline"
                   >
                     Политику конфиденциальности
                   </button>{' '}
@@ -243,7 +243,7 @@ export function HomePage() {
                   <button
                     type="button"
                     onClick={() => setActiveModal('consent')}
-                    className="text-cyan-400 hover:text-cyan-300 underline"
+                    className="text-cyan-400 underline"
                   >
                     обработку персональных данных
                   </button>
@@ -253,7 +253,7 @@ export function HomePage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-bold py-4 px-6 rounded-lg transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg shadow-cyan-500/30"
+                className="w-full bg-cyan-500 text-white font-bold py-4 px-6 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? 'Обработка...' : 'Пополнить'}
               </button>
@@ -261,7 +261,7 @@ export function HomePage() {
           </div>
         </main>
 
-        <footer className="mt-16 bg-gray-900/50 backdrop-blur-sm border-t border-cyan-500/20 py-8">
+        <footer className="mt-16 bg-gray-900/50 border-t border-cyan-500/20 py-8">
           <div className="max-w-4xl mx-auto px-4">
             <h3 className="text-cyan-400 font-semibold mb-4 flex items-center gap-2">
               <FileText size={20} />
@@ -270,28 +270,28 @@ export function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <button
                 onClick={() => setActiveModal('offer')}
-                className="text-left text-gray-300 hover:text-cyan-400 transition-colors flex items-center gap-2 p-2 rounded hover:bg-gray-800/50"
+                className="text-left text-gray-300 flex items-center gap-2 p-2 rounded"
               >
                 <FileText size={16} />
                 Оферта
               </button>
               <button
                 onClick={() => setActiveModal('privacy')}
-                className="text-left text-gray-300 hover:text-cyan-400 transition-colors flex items-center gap-2 p-2 rounded hover:bg-gray-800/50"
+                className="text-left text-gray-300 flex items-center gap-2 p-2 rounded"
               >
                 <Shield size={16} />
                 Политика конфиденциальности
               </button>
               <button
                 onClick={() => setActiveModal('consent')}
-                className="text-left text-gray-300 hover:text-cyan-400 transition-colors flex items-center gap-2 p-2 rounded hover:bg-gray-800/50"
+                className="text-left text-gray-300 flex items-center gap-2 p-2 rounded"
               >
                 <UserCheck size={16} />
                 Согласие на обработку данных
               </button>
               <button
                 onClick={() => setActiveModal('refusal')}
-                className="text-left text-gray-300 hover:text-cyan-400 transition-colors flex items-center gap-2 p-2 rounded hover:bg-gray-800/50"
+                className="text-left text-gray-300 flex items-center gap-2 p-2 rounded"
               >
                 <XCircle size={16} />
                 Отказ от услуги
@@ -304,48 +304,27 @@ export function HomePage() {
         </footer>
       </div>
 
-      <Modal
-        isOpen={activeModal === 'offer'}
-        onClose={() => setActiveModal(null)}
-        title="Публичная оферта"
-      >
+      {/* Модалки всегда смонтированы, мгновенное открытие */}
+      <Modal isOpen={activeModal === 'offer'} onClose={() => setActiveModal(null)} title="Публичная оферта">
         <OfferDocument />
       </Modal>
 
-      <Modal
-        isOpen={activeModal === 'privacy'}
-        onClose={() => setActiveModal(null)}
-        title="Политика конфиденциальности"
-      >
+      <Modal isOpen={activeModal === 'privacy'} onClose={() => setActiveModal(null)} title="Политика конфиденциальности">
         <PrivacyPolicyDocument />
       </Modal>
 
-      <Modal
-        isOpen={activeModal === 'consent'}
-        onClose={() => setActiveModal(null)}
-        title="Согласие на обработку персональных данных"
-      >
+      <Modal isOpen={activeModal === 'consent'} onClose={() => setActiveModal(null)} title="Согласие на обработку персональных данных">
         <PersonalDataConsentDocument />
       </Modal>
 
-      <Modal
-        isOpen={activeModal === 'refusal'}
-        onClose={() => setActiveModal(null)}
-        title="Отказ от услуги"
-      >
+      <Modal isOpen={activeModal === 'refusal'} onClose={() => setActiveModal(null)} title="Отказ от услуги">
         <ServiceRefusalDocument />
       </Modal>
 
       <PaymentModal isOpen={isPaymentModalOpen} />
       <QRModal isOpen={isQRModalOpen} onClose={() => setIsQRModalOpen(false)} qrData={paymentData} />
 
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </div>
   );
 }
