@@ -1,9 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL!;
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY!;
-
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from "../lib/supabase";
 
 export async function getTechStatus(): Promise<boolean> {
   try {
@@ -11,7 +6,7 @@ export async function getTechStatus(): Promise<boolean> {
       .from("tech")
       .select("tech")
       .eq("id", 2)
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.error("Supabase tech-status error:", error);
