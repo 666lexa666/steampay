@@ -59,105 +59,144 @@ export function HomePage() {
   };
 
   const handleSubmitPayment = async (data: { steamLogin: string; amount: number }) => {
-    console.log('handleSubmitPayment fired', data);
+  console.log('handleSubmitPayment fired', data);
 
-    setPaymentData(null);
-    setIsPaymentModalOpen(true);
-    setIsLoading(true);
+  const amountRub = data.amount;
 
-    let visitorId = 'unknown';
-    let fingerprintRaw: any = null;
+  // ===== ЖЁСТКИЕ ЛИМИТЫ =====
+  if (!Number.isFinite(amountRub)) {
+    setToast({
+      message: 'Введите корректную сумму',
+      type: 'error',
+    });
+    return;
+  }
 
+  if (amountRub < MIN_AMOUNT) {
+    setToast({
+      message: `Минимальная сумма пополнения — ${MIN_AMOUNT} ₽`,
+      type: 'error',
+    });
+    return;
+  }
+
+  if (amountRub > MAX_SINGLE_AMOUNT) {
+    setToast({
+      message: `Максимальная сумма за одно пополнение — ${MAX_SINGLE_AMOUNT} ₽`,
+      type: 'error',
+    });
+    return;
+  }
+
+  // ⚠️ ЗАГЛУШКИ — заменить данными с сервера
+  const dailyTotal = 0;   // сколько уже пополнил сегодня
+  const monthlyTotal = 0; // сколько уже пополнил в этом месяце
+
+  if (dailyTotal + amountRub > MAX_DAILY_AMOUNT) {
+    setToast({
+      message: `Превышен дневной лимит — ${MAX_DAILY_AMOUNT} ₽`,
+      type: 'error',
+    });
+    return;
+  }
+
+  if (monthlyTotal + amountRub > MAX_MONTHLY_AMOUNT) {
+    setToast({
+      message: `Превышен месячный лимит — ${MAX_MONTHLY_AMOUNT} ₽`,
+      type: 'error',
+    });
+    return;
+  }
+
+  // ===== ЕСЛИ ВСЁ ОК — ИДЁМ ДАЛЬШЕ =====
+  setPaymentData(null);
+  setIsPaymentModalOpen(true);
+  setIsLoading(true);
+
+  let visitorId = 'unknown';
+  let fingerprintRaw: any = null;
+
+  try {
+    if (typeof window !== 'undefined') {
+      const FingerprintJSModule = await import('@fingerprintjs/fingerprintjs');
+      const FingerprintJS = (FingerprintJSModule.default || FingerprintJSModule) as any;
+
+      const fpInstance = await FingerprintJS.load();
+      const result = await fpInstance.get();
+
+      visitorId = result?.visitorId ?? 'unknown';
+      fingerprintRaw = result?.components ?? null;
+    }
+  } catch (err) {
+    console.error('FingerprintJS error:', err);
+  }
+
+  const payload = {
+    steamLogin: data.steamLogin,
+    amount: amountRub * 100, // копейки
+    api_login: import.meta.env.VITE_API_LOGIN,
+    api_key: import.meta.env.VITE_API_KEY,
+    fingerprint: visitorId,
+    fingerprint_raw: fingerprintRaw,
+  };
+
+  try {
+    const res = await fetch('https://steampay-back.onrender.com/api/client/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    let responseBody: any = null;
     try {
-      if (typeof window !== 'undefined') {
-        const FingerprintJSModule = await import('@fingerprintjs/fingerprintjs');
-        const FingerprintJS = (FingerprintJSModule.default || FingerprintJSModule) as any;
-
-        const fpInstance = await FingerprintJS.load();
-        const result = await fpInstance.get();
-
-        visitorId = result?.visitorId ?? 'unknown';
-        fingerprintRaw = result?.components ?? null;
-
-        console.log('FP result', { visitorId, fingerprintRaw });
-      }
-    } catch (err) {
-      console.error('FingerprintJS error:', err);
+      responseBody = await res.json();
+    } catch {
+      responseBody = await res.text();
     }
 
-    const payload = {
-      steamLogin: data.steamLogin,
-      amount: data.amount * 100,
-      api_login: import.meta.env.VITE_API_LOGIN,
-      api_key: import.meta.env.VITE_API_KEY,
-      fingerprint: visitorId,
-      fingerprint_raw: fingerprintRaw,
-    };
-
-    console.log('Payload to server:', payload);
-
-    try {
-      const res = await fetch('https://steampay-back.onrender.com/api/client/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      console.log('Server response status:', res.status);
-
-      let responseBody: any = null;
-      try {
-        responseBody = await res.json();
-      } catch (err) {
-        console.error('Ошибка парсинга тела ответа от сервера:', err);
-        responseBody = await res.text();
-      }
-
-      console.log('Server response body:', responseBody);
-
-      if (res.status === 422 || responseBody?.code === -100) {
-        setToast({
-          message: 'Вы ввели неправильный логин Steam',
-          type: 'error',
-        });
-        setIsLoading(false);
-        return;
-      }
-
-      if (!res.ok) {
-        setToast({
-          message: `Ошибка сервера: ${responseBody?.error || res.statusText}`,
-          type: 'error',
-        });
-        setIsPaymentModalOpen(false);
-        setIsLoading(false);
-        return;
-      }
-
-      const qr = responseBody.qr_payload;
-      if (!qr) {
-        setToast({
-          message: 'Ошибка: не получен QR-код от сервера',
-          type: 'error',
-        });
-        setIsPaymentModalOpen(false);
-        setIsLoading(false);
-        return;
-      }
-
-      setPaymentData(qr);
-      setIsPaymentModalOpen(false);
-      setIsQRModalOpen(true);
-    } catch (err) {
-      console.error('handleSubmitPayment error:', err);
+    if (res.status === 422 || responseBody?.code === -100) {
       setToast({
-        message: 'Произошла ошибка при создании заказа. Попробуйте ещё раз.',
+        message: 'Вы ввели неправильный логин Steam',
         type: 'error',
       });
-    } finally {
       setIsLoading(false);
+      return;
     }
-  };
+
+    if (!res.ok) {
+      setToast({
+        message: `Ошибка сервера: ${responseBody?.error || res.statusText}`,
+        type: 'error',
+      });
+      setIsPaymentModalOpen(false);
+      setIsLoading(false);
+      return;
+    }
+
+    const qr = responseBody.qr_payload;
+    if (!qr) {
+      setToast({
+        message: 'Ошибка: не получен QR-код от сервера',
+        type: 'error',
+      });
+      setIsPaymentModalOpen(false);
+      setIsLoading(false);
+      return;
+    }
+
+    setPaymentData(qr);
+    setIsPaymentModalOpen(false);
+    setIsQRModalOpen(true);
+  } catch (err) {
+    console.error('handleSubmitPayment error:', err);
+    setToast({
+      message: 'Произошла ошибка при создании заказа. Попробуйте ещё раз.',
+      type: 'error',
+    });
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-black relative overflow-hidden">
@@ -213,7 +252,7 @@ export function HomePage() {
                   required
                 />
               </div>
-              
+
               <p className="text-xs text-gray-400 mt-1">
                 Минимум: 100 ₽ · Максимум за раз: 30 000 ₽<br />
                 Лимит в день: 30 000 ₽ · В месяц: 100 000 ₽
