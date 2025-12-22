@@ -213,6 +213,11 @@ export function HomePage() {
                   required
                 />
               </div>
+              
+              <p className="text-xs text-gray-400 mt-1">
+                Минимум: 100 ₽ · Максимум за раз: 30 000 ₽<br />
+                Лимит в день: 30 000 ₽ · В месяц: 100 000 ₽
+              </p>
 
               <div className="flex items-start gap-3">
                 <input
