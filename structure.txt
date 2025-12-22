@@ -1,0 +1,32 @@
+.
+├── .DS_Store
+├── .gitignore
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── src
+│   ├── App.tsx
+│   ├── components
+│   │   ├── Documents.tsx
+│   │   ├── Modal.tsx
+│   │   ├── PaymentModal.tsx
+│   │   ├── QRModal.tsx
+│   │   └── Toast.tsx
+│   ├── index.css
+│   ├── lib
+│   │   └── supabase.ts
+│   ├── main.tsx
+│   ├── pages
+│   │   ├── HomePage.tsx
+│   │   └── TechMaintenance.tsx
+│   ├── services
+│   │   └── techStatus.ts
+│   └── vite-env.d.ts
+├── structure.txt
+├── tailwind.config.js
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts

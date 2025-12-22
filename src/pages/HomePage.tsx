@@ -10,6 +10,7 @@ import {
   PersonalDataConsentDocument,
   ServiceRefusalDocument,
 } from '../components/Documents';
+import logo from '../assets/logo.png';
 
 interface ToastState {
   message: string;
@@ -186,7 +187,7 @@ export function HomePage() {
       <div className="relative z-10 container mx-auto px-4 py-8">
         <header className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Gamepad2 className="w-12 h-12 text-cyan-400" />
+            <img src={logo} alt="TOR PAYMENTS" className="w-12 h-12" />
             <h1 className="text-4xl md:text-5xl font-bold text-white">
               TOR <span className="text-cyan-400">PAYMENTS</span>
             </h1>
